@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>શ્રી શક્તિ ગરબી મંડળ - નાટક પાત્રો</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#d94c1e',
+                        secondary: '#b83b13',
+                        saffron: '#ff9933',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Hind Vadodara', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcf8f6;
+        }
+
+        /* custom styling for printable page */
+        @media print {
+            @page { size: A4; margin: 10mm; }
+            body { 
+                background-color: white !important; 
+                padding: 0 !important; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+            }
+            #appContainer { box-shadow: none !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            #loginScreen, form, .controls, hr, .no-print, thead { display: none !important; }
+            
+            table { 
+                border: none !important; 
+                background-image: repeating-linear-gradient(transparent, transparent 29px, #d1d5db 30px) !important;
+                background-size: 100% 30px !important;
+                line-height: 30px !important;
+                margin-top: 5px !important;
+            }
+            
+            tr { background: transparent !important; page-break-inside: avoid; }
+            
+            th, td { 
+                border: none !important; 
+                padding: 0 10px !important; 
+                background: transparent !important;
+                font-size: 16px !important;
+                font-weight: bold !important;
+                color: #1f2937 !important; 
+                vertical-align: top !important;
+            }
+
+            .col-sr { 
+                width: 40px !important; 
+                text-align: right !important; 
+                padding-right: 15px !important;
+            }
+
+            .col-char { 
+                display: none !important; 
+            }
+
+            .col-role { 
+                border-left: 2px solid #d94c1e !important; 
+                padding-left: 15px !important;
+            }
+            
+            .print-natak-title {
+                display: block !important;
+                text-align: center !important;
+                color: #d94c1e !important;
+                font-size: 20px !important;
+                font-weight: bold !important;
+                text-decoration: underline;
+                margin-bottom: 5px;
+                line-height: 1.2 !important;
+            }
+
+            .print-pravesh-title {
+                display: block !important;
+                text-align: center !important;
+                color: #d94c1e !important;
+                font-size: 18px !important;
+                font-weight: bold !important;
+                margin-bottom: 10px;
+                white-space: pre-line;
+                line-height: 1.4 !important;
+            }
+
+            .natak-heading td { 
+                padding: 0 !important;
+                background: transparent !important;
+            }
+            
+            .pravesh-footer td {
+                color: #d94c1e !important; 
+                font-weight: bold !important;
+                text-align: center !important;
+                font-size: 16px !important;
+                padding: 2px 0 !important; 
+                background: transparent !important;
+            }
+
+            .screen-only { display: none !important; }
+            .print-only { display: inline !important; }
+            .book-line { border: none !important; display: inline; } 
+        }
+
+        .print-only { display: none; }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 antialiased">
+
+<!-- લૉગિન સ્ક્રીન -->
+<div id="loginScreen" class="flex min-h-screen items-center justify-center p-4 bg-gradient-to-br from-orange-100 via-amber-50 to-orange-200">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-primary">
+        <div class="flex flex-col items-center mb-6">
+            <div class="w-24 h-24 rounded-full bg-orange-100 flex items-center justify-center border-2 border-primary mb-3 shadow-md">
+                <span class="text-4xl">🪔</span>
+            </div>
+            <h2 class="text-2xl font-bold text-primary tracking-wide">શ્રી શક્તિ ગરબી મંડળ</h2>
+            <p class="text-sm text-gray-500 mt-1">નાટક પાત્રો સંચાલન સિસ્ટમ</p>
+        </div>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">યુઝરનેમ (Username)</label>
+                <input type="text" id="loginUser" placeholder="તમારું યુઝરનેમ નાખો" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">પાસવર્ડ (Password)</label>
+                <input type="password" id="loginPass" placeholder="તમારો પાસવર્ડ નાખો" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+            </div>
+            
+            <button onclick="checkLogin()" class="w-full py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg shadow-md transition transform active:scale-[0.98]">
+                🔑 લૉગિન કરો (Login)
+            </button>
+            
+            <p id="loginError" class="text-red-500 text-sm font-semibold text-center mt-2 hidden">
+                ⚠️ ખોટો પાસવર્ડ અથવા યુઝરનેમ!
+            </p>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-center text-gray-400">
+            યુઝર્સ: nitin, vishal, ashwin (Full) | paresh, chirag (Edit Only)
+        </div>
+    </div>
+</div>
+
+<!-- મેઈન સિસ્ટમ -->
+<div id="appContainer" class="hidden max-w-6xl mx-auto my-6 bg-white p-4 md:p-8 rounded-2xl shadow-xl border border-orange-100">
+    
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-center justify-between border-b-2 border-primary pb-4 mb-6 gap-4 no-print">
+        <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center border-2 border-primary shadow-sm flex-shrink-0">
+                <span class="text-3xl">🪔</span>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-primary">શ્રી શક્તિ ગરબી મંડળ</h1>
+                <p class="text-xs md:text-sm text-gray-500 font-medium">નાટક અને પાત્રોનું સંચાલન બોર્ડ</p>
+            </div>
+        </div>
+        <div id="userInfo" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 text-xs md:text-sm font-semibold text-primary">
+            <!-- User login status injected via JS -->
+        </div>
+    </div>
+
+    <!-- Input Form -->
+    <form id="patraForm" class="bg-orange-50/50 p-4 md:p-6 rounded-xl border border-orange-100 mb-6 no-print">
+        <h3 class="text-base font-bold text-primary mb-3 flex items-center gap-2">
+            <span>➕</span> નવું પાત્ર અથવા પ્રવેશ ઉમેરો
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">નાટકનું નામ</label>
+                <input type="text" id="natakName" list="natakDropdownList" placeholder="દા.ત. વીર અભિમન્યુ" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white">
+                <datalist id="natakDropdownList"></datalist>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">પાત્રનું નામ</label>
+                <input type="text" id="patraName" placeholder="દા.ત. શ્રી કૃષ્ણ" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">પ્રવેશ</label>
+                <input type="text" id="praveshInput" list="praveshList" placeholder="દા.ત. પ્રવેશ ૧" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white">
+                <datalist id="praveshList">
+                    <script>
+                        for(let i=1; i<=20; i++){
+                            document.write(`<option value="પ્રવેશ ${i}">`);
+                        }
+                    </script>
+                </datalist>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">પાત્રની ભૂમિકા / સંવાદ</label>
+                <input type="text" id="roleType" placeholder="ભૂમિકા વિગતવાર લખો" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none bg-white">
+            </div>
+        </div>
+        
+        <button type="submit" id="submitBtn" class="w-full md:w-auto px-6 py-2.5 bg-primary hover:bg-secondary text-white font-bold rounded-lg shadow transition">
+            ✨ ડેટા ઉમેરો (Add Character)
+        </button>
+    </form>
+
+    <!-- Filter, Search and Controls -->
+    <div class="controls space-y-3 mb-6 no-print">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <select id="natakFilterSelect" onchange="filterByNatakMenu()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white font-semibold text-gray-700">
+                <option value="">📁 બધા નાટકો જુઓ (All Plays)</option>
+            </select>
+
+            <input type="text" id="searchInput" placeholder="🔎 પાત્ર અથવા પ્રવેશ શોધો (Search...)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white">
+        </div>
+        
+        <!-- Controls Buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button type="button" id="exportBtn" onclick="exportToExcel()" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-lg shadow transition flex items-center justify-center gap-1">
+                <span>📊</span> Excel Export
+            </button>
+            <button type="button" id="printBtn" onclick="checkPrintPermission()" class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-lg shadow transition flex items-center justify-center gap-1">
+                <span>🖨️</span> Print PDF
+            </button>
+            <button type="button" id="historyBtn" onclick="openHistoryModal()" class="py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm rounded-lg shadow transition flex items-center justify-center gap-1">
+                <span>📋</span> Activity Log
+            </button>
+            <button type="button" onclick="logout()" class="py-2.5 px-3 bg-gray-600 hover:bg-gray-700 text-white font-bold text-sm rounded-lg shadow transition flex items-center justify-center gap-1">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <table id="dataTable" class="w-full border-collapse text-left">
+            <thead>
+                <tr class="bg-primary text-white text-sm uppercase tracking-wider">
+                    <th class="py-3 px-4 w-16 text-center border-r border-orange-500">ક્રમ<br>(Sr.)</th>
+                    <th class="py-3 px-4 w-48 border-r border-orange-500">પાત્ર<br>(Character)</th>
+                    <th class="py-3 px-4">ભૂમિકા (Role)</th>
+                    <th class="py-3 px-4 w-28 text-center no-print" id="actionHeader">ક્રિયા (Action)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-200"></tbody>
+        </table>
+        <div id="emptyMessage" class="hidden text-center py-12 text-gray-500 font-medium">
+            🚫 કોઈ ડેટા મળ્યો નથી (No data found).
+        </div>
+    </div>
+</div>
+
+<!-- History Modal -->
+<div id="historyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+        <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 bg-orange-50">
+            <h3 class="text-lg font-bold text-primary flex items-center gap-2">
+                <span>📋</span> Activity History (પ્રવૃત્તિ ઇતિહાસ)
+            </h3>
+            <button onclick="closeHistoryModal()" class="text-gray-400 hover:text-red-500 text-xl font-bold p-1">❌</button>
+        </div>
+        <div class="p-4 flex-1 overflow-y-auto">
+            <div class="flex justify-end mb-3">
+                <button onclick="clearHistory()" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow">
+                    🗑️ Clear History
+                </button>
+            </div>
+            <table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-700">
+                        <th class="p-2 border text-left">સમય</th>
+                        <th class="p-2 border text-left">યુઝર</th>
+                        <th class="p-2 border text-left">વિગત</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Users Credentials
+    const users = {
+        "nitin": { pass: "123nitin", role: "all", name: "નિતિન ભાઈ" },
+        "vishal": { pass: "123vishal", role: "all", name: "વિશાલ ભાઈ" },
+        "ashwin": { pass: "123ashwin", role: "all", name: "અશ્વિન ભાઈ" },
+        "paresh": { pass: "123paresh", role: "edit_only", name: "પરેશ ભાઈ" },
+        "chirag": { pass: "123chirag", role: "edit_only", name: "ચિરાગ ભાઈ" }
+    };
+
+    function checkLogin() {
+        const u = document.getElementById('loginUser').value.trim().toLowerCase(); 
+        const p = document.getElementById('loginPass').value.trim();
+
+        if (users[u] && users[u].pass === p) {
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('currentUser', u);
+            sessionStorage.setItem('userRole', users[u].role);
+            sessionStorage.setItem('userName', users[u].name);
+            
+            applyPermissions();
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            refreshTable(); 
+        } else {
+            document.getElementById('loginError').classList.remove('hidden');
+        }
+    }
+
+    function applyPermissions() {
+        const role = sessionStorage.getItem('userRole');
+        const userName = sessionStorage.getItem('userName') || sessionStorage.getItem('currentUser');
+        
+        document.getElementById('userInfo').innerHTML = `👤 <b>${userName}</b> (${role === 'all' ? 'Admin - Full Access' : 'Editor Access'})`;
+
+        const historyBtn = document.getElementById('historyBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const printBtn = document.getElementById('printBtn');
+        
+        if (role === 'edit_only') {
+            exportBtn.classList.add('hidden');
+            printBtn.classList.add('hidden');
+            historyBtn.classList.add('hidden');
+        } else {
+            exportBtn.classList.remove('hidden');
+            printBtn.classList.remove('hidden');
+            historyBtn.classList.remove('hidden'); 
+        }
+    }
+
+    function checkPrintPermission() {
+        const role = sessionStorage.getItem('userRole');
+        if (role === 'edit_only') {
+            alert("તમને Print PDF કરવાની પરમિશન નથી!");
+            return;
+        }
+        window.print();
+    }
+
+    function logout() {
+        if(confirm("શું તમે ખરેખર બહાર નીકળવા (Logout) માંગો છો?")) {
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('currentUser');
+            sessionStorage.removeItem('userRole');
+            sessionStorage.removeItem('userName');
+            location.reload(); 
+        }
+    }
+
+    window.onload = function() {
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            applyPermissions();
+            refreshTable();
+        }
+    }
+
+    document.getElementById("loginPass").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkLogin();
+        }
+    });
+
+    let patraData = JSON.parse(localStorage.getItem('gujaratiNatakData')) || [
+        { id: 1, natakName: "વીર અભિમન્યુ", patraName: "શ્રી કૃષ્ણ", pravesh: "પ્રવેશ ૧", roleType: "અર્જુનને માર્ગદર્શન આપે છે અને સંગ્રામમાં વિજયનો માર્ગ દર્શાવે છે." },
+        { id: 2, natakName: "વીર અભિમન્યુ", patraName: "અભિમન્યુ", pravesh: "પ્રવેશ ૧", roleType: "ચક્રવ્યૂહ ભેદવા માટે ગુરુ અને પિતાના આશીર્વાદ લે છે." }
+    ];
+    let historyData = JSON.parse(localStorage.getItem('gujaratiNatakHistory')) || [];
+    let inlineEditId = null;
+
+    function logActivity(actionDesc) {
+        const currentUser = sessionStorage.getItem('userName') || sessionStorage.getItem('currentUser') || 'Unknown';
+        const now = new Date();
+        const timeString = now.toLocaleString('gu-IN', { hour12: true });
+        
+        const logEntry = {
+            time: timeString,
+            user: currentUser,
+            desc: actionDesc
+        };
+        
+        historyData.unshift(logEntry);
+        if(historyData.length > 100) historyData.pop();
+        localStorage.setItem('gujaratiNatakHistory', JSON.stringify(historyData));
+    }
+
+    function openHistoryModal() {
+        const role = sessionStorage.getItem('userRole');
+        if(role !== 'all') {
+            alert("તમને આ ઇતિહાસ જોવાની પરમિશન નથી!");
+            return;
+        }
+        
+        const tbody = document.getElementById('historyTableBody');
+        tbody.innerHTML = '';
+        
+        if(historyData.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">કોઈ ઇતિહાસ ઉપલબ્ધ નથી.</td></tr>`;
+        } else {
+            historyData.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 border text-xs whitespace-nowrap text-gray-600">${log.time}</td>
+                    <td class="p-2 border text-xs font-bold text-primary">${log.user}</td>
+                    <td class="p-2 border text-xs">${log.desc}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        document.getElementById('historyModal').classList.remove('hidden');
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyModal').classList.add('hidden');
+    }
+
+    function clearHistory() {
+        if(confirm("શું તમે ખરેખર બધો ઇતિહાસ (History) ડિલીટ કરવા માંગો છો?")) {
+            historyData = [];
+            localStorage.removeItem('gujaratiNatakHistory');
+            openHistoryModal();
+        }
+    }
+
+    const form = document.getElementById('patraForm');
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const natakFilterSelect = document.getElementById('natakFilterSelect');
+    const natakDropdownList = document.getElementById('natakDropdownList');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const natakNameVal = document.getElementById('natakName').value.trim();
+        const patraNameVal = document.getElementById('patraName').value.trim();
+        const praveshVal = document.getElementById('praveshInput').value.trim(); 
+        const roleTypeVal = document.getElementById('roleType').value.trim();
+
+        const newEntry = {
+            id: Date.now(), 
+            natakName: natakNameVal,
+            patraName: patraNameVal,
+            pravesh: praveshVal, 
+            roleType: roleTypeVal 
+        };
+        patraData.push(newEntry);
+
+        saveData();
+        logActivity(`નાટક '${natakNameVal}' માં નવું પાત્ર '${patraNameVal}' ઉમેર્યું.`);
+        
+        searchInput.value = ''; 
+        refreshTable();
+        
+        document.getElementById('patraName').value = '';
+        document.getElementById('roleType').value = '';
+        document.getElementById('patraName').focus();
+    });
+
+    window.editPraveshGroup = function(natakName, oldPravesh) {
+        const newPravesh = prompt(`પ્રવેશનું નામ બદલો:`, oldPravesh);
+        if (newPravesh !== null && newPravesh.trim() !== oldPravesh) {
+            const finalPravesh = newPravesh.trim();
+            patraData.forEach(item => {
+                const itemPravesh = item.pravesh || "";
+                if (item.natakName === natakName && itemPravesh === oldPravesh) {
+                    item.pravesh = finalPravesh;
+                }
+            });
+            saveData();
+            logActivity(`નાટક '${natakName}' માં પ્રવેશનું નામ બદલીને '${finalPravesh}' કર્યું.`);
+            refreshTable(); 
+        }
+    }
+
+    window.addNoteToPravesh = function(natakName, praveshName) {
+        const note = prompt(`આ પ્રવેશ (${praveshName}) માટે નવી નોટ કે સ્થળ ઉમેરો:`, "");
+        if (note !== null && note.trim() !== "") {
+            const updatedPravesh = praveshName + "\n" + note.trim();
+            patraData.forEach(item => {
+                const itemPravesh = item.pravesh || "";
+                if (item.natakName === natakName && itemPravesh === praveshName) {
+                    item.pravesh = updatedPravesh;
+                }
+            });
+            saveData();
+            logActivity(`નાટક '${natakName}' ના '${praveshName}' માં નોટ ઉમેરી: '${note.trim()}'`);
+            refreshTable();
+        }
+    }
+
+    function updateNatakDropdowns() {
+        const uniqueNataks = [...new Set(patraData.map(item => item.natakName))].filter(Boolean);
+        uniqueNataks.sort();
+
+        natakDropdownList.innerHTML = '';
+        uniqueNataks.forEach(natak => {
+            const opt = document.createElement('option');
+            opt.value = natak;
+            natakDropdownList.appendChild(opt);
+        });
+
+        const currentSelectedFilter = natakFilterSelect.value;
+        natakFilterSelect.innerHTML = '<option value="">📁 બધા નાટકો જુઓ (All Plays)</option>';
+        uniqueNataks.forEach(natak => {
+            const opt = document.createElement('option');
+            opt.value = natak;
+            opt.textContent = `🎭 ${natak}`;
+            if (natak === currentSelectedFilter) {
+                opt.selected = true;
+            }
+            natakFilterSelect.appendChild(opt);
+        });
+    }
+
+    function filterByNatakMenu() {
+        refreshTable();
+    }
+
+    function refreshTable() {
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') return;
+        
+        updateNatakDropdowns();
+        
+        const query = searchInput.value.toLowerCase();
+        const selectedNatak = natakFilterSelect.value;
+        
+        let dataToRender = patraData;
+
+        if(selectedNatak) {
+            dataToRender = dataToRender.filter(item => item.natakName === selectedNatak);
+        }
+
+        if(query) {
+            dataToRender = dataToRender.filter(item => 
+                (item.natakName && item.natakName.toLowerCase().includes(query)) ||
+                (item.patraName && item.patraName.toLowerCase().includes(query)) ||
+                (item.roleType && item.roleType.toLowerCase().includes(query)) ||
+                (item.pravesh && item.pravesh.toLowerCase().includes(query))
+            );
+        }
+        renderTable(dataToRender);
+    }
+
+    function renderTable(dataToRender) {
+        tableBody.innerHTML = '';
+        if (dataToRender.length === 0) {
+            emptyMessage.classList.remove('hidden');
+            return;
+        } 
+        emptyMessage.classList.add('hidden');
+
+        const role = sessionStorage.getItem('userRole');
+
+        const groupedData = dataToRender.reduce((acc, item) => {
+            const natak = item.natakName || "અન્ય (Other)";
+            const pravesh = item.pravesh || "";
+            const groupKey = natak + "|||" + pravesh;
+            
+            if (!acc[groupKey]) {
+                acc[groupKey] = { natak: natak, pravesh: pravesh, items: [] };
+            }
+            acc[groupKey].items.push(item);
+            return acc;
+        }, {});
+
+        const groupKeys = Object.keys(groupedData).sort((a, b) => {
+            return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+        });
+
+        groupKeys.forEach(key => {
+            const group = groupedData[key];
+            const safeNatak = group.natak.replace(/'/g, "\\'");
+            const safePravesh = group.pravesh.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+            
+            let praveshScreenText = "";
+            if(group.pravesh) {
+                const formattedPravesh = group.pravesh.replace(/\n/g, '<br>');
+                praveshScreenText = ` 
+                    <span class="block text-primary font-bold mt-1 leading-snug">${formattedPravesh}</span>
+                    ${role === 'all' ? `
+                        <div class="flex justify-center gap-2 mt-2 no-print">
+                            <button class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded shadow" onclick="editPraveshGroup('${safeNatak}', '${safePravesh}')" title="પ્રવેશ બદલો">✏️ Edit</button>
+                            <button class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold rounded shadow" onclick="addNoteToPravesh('${safeNatak}', '${safePravesh}')" title="નોટ ઉમેરો">➕ Add Note</button>
+                        </div>
+                    ` : ''}
+                `;
+            } else {
+                praveshScreenText = ` 
+                    ${role === 'all' ? `<button class="mt-2 px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded shadow no-print" onclick="editPraveshGroup('${safeNatak}', '')" title="નવો પ્રવેશ ઉમેરો">✏️ Add પ્રવેશ</button>` : ''}
+                `;
+            }
+
+            const headerRow = document.createElement('tr');
+            headerRow.className = 'natak-heading bg-orange-100/70 border-y-2 border-orange-200';
+            headerRow.innerHTML = `
+                <td colspan="4" class="p-3 text-center">
+                    <span class="screen-only">
+                        <span class="text-base font-extrabold text-primary">🎭 નાટક: ${group.natak}</span>
+                        ${praveshScreenText}
+                    </span>
+                    <span class="print-only">
+                        <span class="print-natak-title">નાટક: ${group.natak}</span>
+                        <span class="print-pravesh-title">${group.pravesh ? group.pravesh : ''}</span>
+                    </span>
+                </td>
+            `;
+            tableBody.appendChild(headerRow);
+
+            group.items.forEach((item, index) => {
+                const displayRole = item.roleType ? item.roleType : "";
+                const row = document.createElement('tr');
+                row.className = "hover:bg-orange-50/30 transition";
+                
+                let actionButtonsHtml = '';
+                if (role === 'all') {
+                    actionButtonsHtml = `
+                        <button class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded shadow transition" onclick="startInlineEdit(${item.id})">Edit</button>
+                        <button class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow transition" onclick="deleteEntry(${item.id})">Delete</button>
+                    `;
+                } else {
+                    actionButtonsHtml = `
+                        <button class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded shadow transition" onclick="startInlineEdit(${item.id})">Edit</button>
+                    `;
+                }
+
+                if (inlineEditId === item.id) {
+                    row.innerHTML = `
+                        <td class="p-3 text-center font-bold text-gray-500">${index + 1}.</td>
+                        <td class="p-3">
+                            <input type="text" id="inline-patra-${item.id}" value="${item.patraName}" class="w-full px-2 py-1 border rounded text-sm font-semibold">
+                        </td>
+                        <td class="p-3">
+                            <textarea id="inline-role-${item.id}" rows="3" class="w-full px-2 py-1 border rounded text-sm">${displayRole}</textarea>
+                        </td>
+                        <td class="p-3 text-center no-print">
+                            <div class="flex flex-col gap-1">
+                                <button class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded shadow" onclick="saveInlineEdit(${item.id})">💾 Save</button>
+                                <button class="px-2 py-1 bg-gray-500 hover:bg-gray-600 text-white text-xs font-bold rounded shadow" onclick="cancelInlineEdit()">❌ Cancel</button>
+                            </div>
+                        </td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td class="p-3 text-center font-bold text-gray-500 col-sr">${index + 1}.</td>
+                        <td class="p-3 font-bold text-gray-800 col-char">${item.patraName}</td>
+                        <td class="p-3 text-gray-700 leading-relaxed col-role"><span class="book-line">${displayRole || "-"}</span></td>
+                        <td class="p-3 text-center no-print">
+                            <div class="flex justify-center gap-1">
+                                ${actionButtonsHtml}
+                            </div>
+                        </td>
+                    `;
+                }
+                tableBody.appendChild(row);
+            });
+
+            if (group.pravesh) {
+                const footerRow = document.createElement('tr');
+                footerRow.className = 'pravesh-footer bg-gray-50 text-center border-b border-gray-200';
+                footerRow.innerHTML = `
+                    <td colspan="4" class="py-1 px-3 text-xs font-bold text-primary">
+                        <span class="screen-only">--- પ્રવેશ પૂર્ણ ---</span>
+                        <span class="print-only">«««— પ્રવેશ પૂરો —»»»</span>
+                    </td>
+                `;
+                tableBody.appendChild(footerRow);
+            }
+        });
+    }
+    
+    window.startInlineEdit = function(id) {
+        inlineEditId = id;
+        refreshTable(); 
+    }
+
+    window.cancelInlineEdit = function() {
+        inlineEditId = null;
+        refreshTable();
+    }
+
+    window.saveInlineEdit = function(id) {
+        const newPatra = document.getElementById(`inline-patra-${id}`).value.trim();
+        const newRole = document.getElementById(`inline-role-${id}`).value.trim();
+        
+        const index = patraData.findIndex(item => item.id === id);
+        if(index !== -1) {
+            const oldName = patraData[index].patraName;
+            patraData[index].patraName = newPatra;
+            patraData[index].roleType = newRole;
+            saveData();
+            logActivity(`પાત્ર '${oldName}' માં ફેરફાર કરીને '${newPatra}' કર્યું.`);
+        }
+        
+        inlineEditId = null; 
+        refreshTable();
+    }
+
+    window.deleteEntry = function(id) {
+        const role = sessionStorage.getItem('userRole');
+        if (role !== 'all') {
+            alert("તમને ડેટા ડિલીટ કરવાની પરમિશન નથી!");
+            return;
+        }
+        if(confirm("શું તમે ખરેખર આ માહિતી કાઢી નાખવા માંગો છો? (Are you sure?)")) {
+            const itemToDelete = patraData.find(item => item.id === id);
+            patraData = patraData.filter(item => item.id !== id);
+            saveData();
+            if(itemToDelete) {
+                logActivity(`પાત્ર '${itemToDelete.patraName}' (${itemToDelete.natakName}) ડિલીટ કર્યું.`);
+            }
+            refreshTable();
+        }
+    }
+
+    searchInput.addEventListener('keyup', function() {
+        refreshTable();
+    });
+
+    function saveData() {
+        localStorage.setItem('gujaratiNatakData', JSON.stringify(patraData));
+    }
+
+    window.exportToExcel = function() {
+        const role = sessionStorage.getItem('userRole');
+        if (role === 'edit_only') {
+            alert("તમને Excel Export કરવાની પરમિશન નથી!");
+            return;
+        }
+
+        if (patraData.length === 0) {
+            alert("Export કરવા માટે કોઈ ડેટા નથી! (No data to export)");
+            return;
+        }
+
+        logActivity(`Excel Export ડાઉનલોડ કર્યું.`);
+
+        const groupedData = patraData.reduce((acc, item) => {
+            const natak = item.natakName || "અન્ય (Other)";
+            const pravesh = item.pravesh || "";
+            const groupKey = natak + "|||" + pravesh;
+            
+            if (!acc[groupKey]) {
+                acc[groupKey] = { natak: natak, pravesh: pravesh, items: [] };
+            }
+            acc[groupKey].items.push(item);
+            return acc;
+        }, {});
+
+        const groupKeys = Object.keys(groupedData).sort((a, b) => {
+            return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+        });
+
+        let excelContent = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+            <meta charset="utf-8">
+            <style>
+                table { border-collapse: collapse; width: 100%; font-family: 'Segoe UI', sans-serif; }
+                th, td { border: 1px solid #000000; padding: 5px; vertical-align: top; }
+                th { background-color: #d94c1e; color: #ffffff; font-weight: bold; text-align: center; }
+                .col-sr { width: 40px; text-align: center; font-weight: bold; }
+                .col-char { width: 120px; font-weight: bold; }
+                .col-role { width: 550px; white-space: normal; word-wrap: break-word; text-align: justify; }
+                .natak-row { background-color: #fcece8; font-weight: bold; font-size: 16px; text-align: center; color: #d94c1e; }
+                .main-title { font-size: 20px; font-weight: bold; color: #d94c1e; text-align: center; }
+            </style>
+        </head>
+        <body>
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="3" class="main-title">શ્રી શક્તિ ગરબી મંડળ - નાટક પાત્રો</td>
+                    </tr>
+                    <tr>
+                        <th class="col-sr">ક્રમ (Sr.)</th>
+                        <th class="col-char">પાત્ર (Character)</th>
+                        <th class="col-role">ભૂમિકા (Role)</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        groupKeys.forEach(key => {
+            const group = groupedData[key];
+            const headingText = group.pravesh ? group.pravesh : `નાટક: ${group.natak}`;
+            excelContent += `<tr><td colspan="3" class="natak-row">${headingText.replace(/\n/g, '<br>')}</td></tr>`;
+            
+            group.items.forEach((item, index) => {
+                let roleHtml = (item.roleType || "-").replace(/\n/g, '<br>');
+                excelContent += `<tr>
+                    <td class="col-sr">${index + 1}</td>
+                    <td class="col-char">${item.patraName || ''}</td>
+                    <td class="col-role">${roleHtml}</td>
+                </tr>`;
+            });
+
+            if (group.pravesh) {
+                excelContent += `<tr><td colspan="3" style="text-align: center; font-weight: bold; background-color: #f1f1f1; color: #d94c1e;">«««— પ્રવેશ પૂરો —»»»</td></tr>`;
+            }
+        });
+
+        excelContent += `</tbody></table></body></html>`;
+
+        const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute("href", url);
+        link.setAttribute("download", "Shree_Shakti_Garbi_Mandal_Patra.xls");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+</body>
+</html>
